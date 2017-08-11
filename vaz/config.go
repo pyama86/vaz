@@ -7,6 +7,7 @@ type Config struct {
 	ServerEndpoint string `toml:"server_endpoint"`
 	SslVerify      bool   `toml:"ssl_verify"`
 	ScanInterval   int    `toml:"scan_interval"`
+	AccessToken    int    `toml:"access_token"`
 }
 
 // NewConfig Config initialize

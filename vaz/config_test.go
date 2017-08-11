@@ -19,6 +19,10 @@ func TestNewConfig(t *testing.T) {
 	if c.ScanInterval != 4000 {
 		t.Errorf("Config cannot parse ScanInterval")
 	}
+
+	if c.AccessToken != "token" {
+		t.Errorf("Config cannot parse AccessToken")
+	}
 }
 
 func TestNewConfigError(t *testing.T) {

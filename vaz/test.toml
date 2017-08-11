@@ -1,3 +1,4 @@
 server_endpoint = "https://localhost/test"
 ssl_verify = false
 scan_interval = 4000
+access_token = "access_token"
