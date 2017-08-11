@@ -1,0 +1,31 @@
+[[constraint]]
+  name = "github.com/future-architect/vuls"
+  branch = "master"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/Azure/azure-storage-go"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/BurntSushi/toml"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/Sirupsen/logrus"
+
+[[constraint]]
+  name = "github.com/aws/aws-sdk-go"
+  revision = "5b341290c488aa6bd76b335d819b4a68516ec3ab"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/jroimartin/gocui"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/kotakanbe/go-cve-dictionary"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/kotakanbe/logrus-prefixed-formatter"
