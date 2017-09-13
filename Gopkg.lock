@@ -62,6 +62,18 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/facebookgo/atomicfile"
+  packages = ["."]
+  revision = "2de1f203e7d5e386a6833233882782932729f27e"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/facebookgo/pidfile"
+  packages = ["."]
+  revision = "f242e2999868dcd267a2b86e49ce1f9cf9e15b16"
+
+[[projects]]
+  branch = "master"
   name = "github.com/future-architect/vuls"
   packages = ["cache","config","contrib/owasp-dependency-check/parser","cveapi","models","report","scan","util"]
   revision = "2cec20c7ee9321e43e9b7c090e04ec24ecc5f266"
@@ -199,6 +211,12 @@
   version = "1.6"
 
 [[projects]]
+  name = "github.com/urfave/cli"
+  packages = ["."]
+  revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
+  version = "v1.20.0"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["curve25519","ed25519","ed25519/internal/edwards25519","ssh","ssh/agent"]
@@ -225,6 +243,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5891f11c0222aac9f29c465aaa5f41045d4716072a73b59af0c2e86a254a46cd"
+  inputs-digest = "944c477d53692f9ff6f72a651400d5f248c0a124c853c597e3887060b9ab5816"
   solver-name = "gps-cdcl"
   solver-version = 1

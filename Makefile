@@ -32,13 +32,13 @@ lint: ## Exec golint
 	@echo "$(INFO_COLOR)==> $(RESET)$(BOLD)Linting$(RESET)"
 	golint -set_exit_status $(TEST)
 
-build: ## Build as linux binary
+build: depsdev  ## Build as linux binary
 	@echo "$(INFO_COLOR)==> $(RESET)$(BOLD)Building$(RESET)"
 	./misc/build $(VERSION) $(REVISION)
 
 ghr: ## Upload to Github releases without token check
 	@echo "$(INFO_COLOR)==> $(RESET)$(BOLD)Releasing for Github$(RESET)"
-	ghr -u pyama v$(VERSION)-$(REVISION) pkg
+	ghr -u pyama86 v$(VERSION)-$(REVISION) pkg
 
 dist: build ## Upload to Github releases
 	@test -z $(GITHUB_TOKEN) || test -z $(GITHUB_API) || $(MAKE) ghr

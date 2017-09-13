@@ -1,6 +1,6 @@
 #!/bin/bash
 
-XC_OS='darwin linux'
+XC_OS='linux'
 XC_ARCH=amd64
 XC_NAME=vaz
 
