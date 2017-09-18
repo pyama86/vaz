@@ -1,31 +1,42 @@
+
+# Gopkg.toml example
+#
+# Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
+# for detailed Gopkg.toml documentation.
+#
+# required = ["github.com/user/thing/cmd/thing"]
+# ignored = ["github.com/user/project/pkgX", "bitbucket.org/user/project/pkgA/pkgY"]
+#
+# [[constraint]]
+#   name = "github.com/user/project"
+#   version = "1.0.0"
+#
+# [[constraint]]
+#   name = "github.com/user/project2"
+#   branch = "dev"
+#   source = "github.com/myfork/project2"
+#
+# [[override]]
+#  name = "github.com/x/y"
+#  version = "2.4.0"
+
+
+[[constraint]]
+  name = "github.com/BurntSushi/toml"
+  version = "0.3.0"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/facebookgo/pidfile"
+
 [[constraint]]
   name = "github.com/future-architect/vuls"
-  branch = "master"
+  version = "0.4.0"
 
 [[constraint]]
   branch = "master"
-  name = "github.com/Azure/azure-storage-go"
+  name = "github.com/sirupsen/logrus"
 
 [[constraint]]
-  branch = "master"
-  name = "github.com/BurntSushi/toml"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/Sirupsen/logrus"
-
-[[constraint]]
-  name = "github.com/aws/aws-sdk-go"
-  revision = "5b341290c488aa6bd76b335d819b4a68516ec3ab"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/jroimartin/gocui"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/kotakanbe/go-cve-dictionary"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/kotakanbe/logrus-prefixed-formatter"
+  name = "github.com/urfave/cli"
+  version = "1.20.0"

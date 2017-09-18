@@ -1,0 +1,19 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+%:
+	dh $@
+
+package=vaz
+
+override_dh_auto_install:
+	dh_auto_install
+	install -d -m 755 debian/${package}/usr/bin/
+	install    -m 655 debian/${package}.bin debian/${package}/usr/bin/${package}
+	install -d -m 755 debian/${package}/etc/init.d/
+	install    -m 755 debian/${package}.initd debian/${package}/etc/init.d/${package}
+	install -d -m 755 debian/${package}/etc/logrotate.d/
+	install    -m 644 debian/${package}.logrotate debian/${package}/etc/logrotate.d/${package}
+	install    -m 644 debian/${package}.conf.example debian/${package}/etc/${package}.conf.example
+
+override_dh_usrlocal:

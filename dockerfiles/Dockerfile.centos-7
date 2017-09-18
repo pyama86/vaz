@@ -1,0 +1,9 @@
+FROM centos:7
+
+RUN yum install -y make rpmdevtools
+
+RUN mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+RUN sed -i "s;%_build_name_fmt.*;%_build_name_fmt\t%%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.el7.rpm;" /usr/lib/rpm/macros
+
+RUN mkdir /vaz
+WORKDIR /vaz

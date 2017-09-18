@@ -1,0 +1,38 @@
+rpm7:
+  dockerfile: dockerfiles/Dockerfile.centos-7
+  build: .
+  volumes:
+    - .:/vaz
+  environment:
+    DIST: el7
+  command: make rpm
+
+rpm6:
+  dockerfile: dockerfiles/Dockerfile.centos-6
+  build: .
+  volumes:
+    - .:/vaz
+  environment:
+    DIST: el6
+  command: make rpm
+
+rpm-repo:
+  dockerfile: dockerfiles/Dockerfile.centos-repo
+  build: .
+  volumes:
+    - .:/vaz
+  command: make rpm-repo
+
+deb16:
+  dockerfile: dockerfiles/Dockerfile.ubuntu-16
+  build: .
+  volumes:
+    - .:/vaz
+  command: make deb
+
+deb-repo:
+  dockerfile: dockerfiles/Dockerfile.ubuntu-repo
+  build: .
+  volumes:
+    - .:/vaz
+  command: make deb-repo

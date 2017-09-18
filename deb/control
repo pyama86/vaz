@@ -1,0 +1,14 @@
+Source: vaz
+Section: admin
+Priority: optional
+Maintainer: pyama86<www.azu.com@gmail.com>
+Standards-Version: 3.9.7
+Homepage: https://github.com/pyama86/vaz
+Vcs-Browser: https://github.com/pyama86/vaz/tree/deb
+Vcs-Git: https://github.com/pyama86/vaz -b debian
+
+Package: vaz
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Get the version of the linux package and report it to veeta.org.
+  You can use veeta.org to manage vulnerable packages.

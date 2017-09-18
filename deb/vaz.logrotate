@@ -1,0 +1,9 @@
+/var/log/vaz.log {
+  daily
+  rotate 7
+  missingok
+  sharedscripts
+  notifempty
+  compress
+  copytruncate
+}

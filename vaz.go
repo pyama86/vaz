@@ -11,15 +11,19 @@ import (
 	"path"
 	"time"
 
-	"github.com/Sirupsen/logrus"
+	logrus_stack "github.com/Gurpartap/logrus-stack"
+
 	"github.com/facebookgo/pidfile"
 	vc "github.com/future-architect/vuls/config"
 	"github.com/future-architect/vuls/models"
 	"github.com/future-architect/vuls/scan"
 	"github.com/future-architect/vuls/util"
 	"github.com/pyama86/vaz/config"
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
+
+const timeoutSec = 300
 
 var (
 	version   string
@@ -33,8 +37,11 @@ func init() {
 	formatter := new(logrus.JSONFormatter)
 	formatter.TimestampFormat = "2006-01-02 15:04:05"
 	logrus.SetFormatter(formatter)
-
+	callerLevels := logrus.AllLevels
+	stackLevels := []logrus.Level{logrus.PanicLevel, logrus.FatalLevel, logrus.ErrorLevel}
+	logrus.AddHook(logrus_stack.NewHook(callerLevels, stackLevels))
 }
+
 func main() {
 	cli.VersionPrinter = printVersion
 
@@ -104,7 +111,6 @@ func LaunchServer(c *cli.Context) {
 	}
 
 	util.Log = util.NewCustomLogger(vc.ServerInfo{})
-	timeoutSec := 300
 	vc.Conf = vc.Config{
 		CacheDBPath: path.Join(wd, "cache.db"),
 		LogDir:      wd,
@@ -131,12 +137,12 @@ func LaunchServer(c *cli.Context) {
 
 		raw, err := ioutil.ReadFile(path.Join(wd, "current", fmt.Sprintf("%s.json", hostname)))
 		if err != nil {
-			logrus.Fatal(err)
+			logrus.Fatal(err, " can't read scan result")
 		}
 
 		sr := models.ScanResult{}
 		if err := json.Unmarshal(raw, &sr); err != nil {
-			logrus.Fatal(err)
+			logrus.Fatal(err, " scan result unmarshal error")
 		}
 
 		id, err := ioutil.ReadFile(path.Join(wd, ".id"))
@@ -154,15 +160,16 @@ func LaunchServer(c *cli.Context) {
 		}
 
 		if err := request(&h, conf); err != nil {
-			logrus.Error(err)
+			logrus.Error(err, "http request error")
 		} else {
 			if err := writeID(path.Join(wd, ".id"), h.HostID); err != nil {
-				logrus.Fatal(err)
+				logrus.Fatal(err, " can't write host id")
 			}
 		}
 		time.Sleep(10 * time.Minute)
 	}
 }
+
 func exists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {

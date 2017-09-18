@@ -1,0 +1,9 @@
+FROM ubuntu:xenial
+
+RUN apt-get -qqy update && \
+    apt-get install -qqy make debhelper dh-make devscripts
+
+ENV USER root
+
+RUN mkdir /vaz
+WORKDIR /vaz

@@ -29,5 +29,5 @@ func NewConfig(confPath string) (*Config, error) {
 }
 
 func defaultConfig(c *Config) {
-	c.ServerEndpoint = "http://veeta.org/api/v1/hosts"
+	c.ServerEndpoint = "https://veeta.org/api/v1/hosts"
 }
