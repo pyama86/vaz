@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -160,7 +161,7 @@ func LaunchServer(c *cli.Context) {
 		}
 
 		if err := request(&h, conf); err != nil {
-			logrus.Error(err, "http request error")
+			logrus.Error(err, " http request error")
 		} else {
 			if err := writeID(path.Join(wd, ".id"), h.HostID); err != nil {
 				logrus.Fatal(err, " can't write host id")
@@ -198,14 +199,21 @@ func request(host *Host, conf *config.Config) error {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set(VEETAToken, conf.Token)
 	client := &http.Client{}
-	resp, err := client.Do(req)
+	res, err := client.Do(req)
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
+	if res.StatusCode != http.StatusCreated && res.StatusCode != http.StatusOK {
+		b, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.New(string(b))
+	}
 
 	bufbody := new(bytes.Buffer)
-	if _, err := bufbody.ReadFrom(resp.Body); err != nil {
+	if _, err := bufbody.ReadFrom(res.Body); err != nil {
 		return err
 	}
 
