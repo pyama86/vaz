@@ -1,6 +1,6 @@
 # vaz
 <p align="center">
-  <img alt="VEETA" src="https://github.com/pyama86/vaz/blob/master/img/veeta.png?raw=true" width="500">
+  <img alt="VEETA" src="https://github.com/pyama86/vaz/blob/master/img/veeta.png?raw=true">
 </p>
 
 [![Build Status](https://travis-ci.org/pyama86/vaz.svg?branch=master)](https://travis-ci.org/pyama86/vaz)
