@@ -16,6 +16,7 @@ Source3:   %{name}.conf.example
 Requires(post): /sbin/chkconfig
 Requires(preun): /sbin/chkconfig, /sbin/service
 Requires(postun): /sbin/service
+Requires: yum-utils
 
 %define debug_package %{nil}
 
@@ -27,7 +28,7 @@ Get the version of the linux package and report it to veeta.org. You can use vee
 %install
 %{__rm} -rf %{buildroot}
 mkdir -p %{buildroot}/usr/bin
-install -m 644 %{_sourcedir}/%{name} %{buildroot}/usr/bin/%{name}
+install -m 755 %{_sourcedir}/%{name} %{buildroot}/usr/bin/%{name}
 mkdir -p %{buildroot}%{_sysconfdir}
 install -m 644 %{_sourcedir}/%{name}.conf.example %{buildroot}%{_sysconfdir}/%{name}.conf.example
 
