@@ -14,6 +14,6 @@ override_dh_auto_install:
 	install    -m 755 debian/${package}.initd debian/${package}/etc/init.d/${package}
 	install -d -m 755 debian/${package}/etc/logrotate.d/
 	install    -m 644 debian/${package}.logrotate debian/${package}/etc/logrotate.d/${package}
-	install    -m 644 debian/${package}.conf.example debian/${package}/etc/${package}.conf.example
+	install    -m 644 debian/${package}.conf.sample debian/${package}/etc/${package}.conf.sample
 
 override_dh_usrlocal:

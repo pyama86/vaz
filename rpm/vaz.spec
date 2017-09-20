@@ -11,7 +11,7 @@ BuildArch:        i386, x86_64
 
 Source0:   %{name}.initd
 Source2:   %{name}.logrotate
-Source3:   %{name}.conf.example
+Source3:   %{name}.conf.sample
 
 Requires(post): /sbin/chkconfig
 Requires(preun): /sbin/chkconfig, /sbin/service
@@ -30,7 +30,7 @@ Get the version of the linux package and report it to veeta.org. You can use vee
 mkdir -p %{buildroot}/usr/bin
 install -m 755 %{_sourcedir}/%{name} %{buildroot}/usr/bin/%{name}
 mkdir -p %{buildroot}%{_sysconfdir}
-install -m 644 %{_sourcedir}/%{name}.conf.example %{buildroot}%{_sysconfdir}/%{name}.conf.example
+install -m 644 %{_sourcedir}/%{name}.conf.sample %{buildroot}%{_sysconfdir}/%{name}.conf.sample
 
 install -d -m 755 %{buildroot}/%{_localstatedir}/log/
 
@@ -58,7 +58,7 @@ fi
 %files
 %defattr(-, root, root)
 /usr/bin/vaz
-/etc/vaz.conf.example
+/etc/vaz.conf.sample
 %{_initrddir}/%{name}
 %{_sysconfdir}/logrotate.d/%{name}
 

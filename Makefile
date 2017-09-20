@@ -7,7 +7,7 @@ RESET=\033[0m
 BOLD=\033[1m
 
 DIST ?= unknown
-SOURCES=COPYING pkg/linux_amd64/vaz vaz.conf.example
+SOURCES=COPYING pkg/linux_amd64/vaz vaz.conf.sample
 
 default: build
 ci: depsdev test vet lint
