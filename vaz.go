@@ -148,7 +148,7 @@ func LaunchServer(c *cli.Context) {
 
 		id, err := ioutil.ReadFile(path.Join(wd, ".id"))
 		if err != nil {
-			logrus.Error(err)
+			logrus.Warn(err)
 		}
 
 		h := Host{
@@ -207,9 +207,9 @@ func request(host *Host, conf *config.Config) error {
 	if res.StatusCode != http.StatusCreated && res.StatusCode != http.StatusOK {
 		b, err := ioutil.ReadAll(res.Body)
 		if err != nil {
-			return nil, err
+			return err
 		}
-		return nil, errors.New(string(b))
+		return errors.New(string(b))
 	}
 
 	bufbody := new(bytes.Buffer)
