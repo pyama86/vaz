@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strings"
 	"time"
 
 	logrus_stack "github.com/Gurpartap/logrus-stack"
@@ -167,6 +168,7 @@ func LaunchServer(c *cli.Context) {
 				logrus.Fatal(err, " can't write host id")
 			}
 		}
+		cleanDir(wd)
 		time.Sleep(10 * time.Minute)
 	}
 }
@@ -205,11 +207,18 @@ func request(host *Host, conf *config.Config) error {
 	}
 	defer res.Body.Close()
 	if res.StatusCode != http.StatusCreated && res.StatusCode != http.StatusOK {
-		b, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			return err
+		message := ""
+		switch res.StatusCode {
+		case http.StatusTooManyRequests:
+			message = "Rate limit reached"
+		default:
+			b, err := ioutil.ReadAll(res.Body)
+			if err != nil {
+				return err
+			}
+			message = string(b)
 		}
-		return errors.New(string(b))
+		return errors.New(message)
 	}
 
 	bufbody := new(bytes.Buffer)
@@ -241,4 +250,20 @@ type Service struct {
 
 func writeID(path string, id string) error {
 	return ioutil.WriteFile(path, []byte(id), os.ModePerm)
+}
+
+func cleanDir(dir string) error {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range files {
+		if file.IsDir() && strings.HasPrefix(file.Name(), "20") && strings.HasSuffix(file.Name(), "00") {
+			if err := os.RemoveAll(path.Join(dir, file.Name())); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
