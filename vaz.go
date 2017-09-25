@@ -148,7 +148,6 @@ func LaunchServer(c *cli.Context) {
 			if err := client.UpdateHost(&h); err != nil {
 				logrus.Error(err, " http request error")
 			}
-			logrus.Info("endresuqst")
 		}
 
 		logrus.Infof("Register %v alert", len(h.Alerts))
@@ -160,6 +159,7 @@ func LaunchServer(c *cli.Context) {
 				})
 				if err != nil {
 					logrus.Error(err, " fetch changelog error")
+					continue
 				}
 				cves := scan.FilterResolvCVEs(a.CVEs, fixCVEs)
 				h.Alerts[i].CVEs = cves
