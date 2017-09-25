@@ -34,12 +34,8 @@
   name = "github.com/facebookgo/pidfile"
 
 [[constraint]]
-  name = "github.com/future-architect/vuls"
-  version = "0.4.0"
-
-[[constraint]]
-  branch = "master"
   name = "github.com/sirupsen/logrus"
+  version = "1.0.3"
 
 [[constraint]]
   name = "github.com/urfave/cli"

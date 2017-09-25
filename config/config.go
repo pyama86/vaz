@@ -29,5 +29,37 @@ func NewConfig(confPath string) (*Config, error) {
 }
 
 func defaultConfig(c *Config) {
-	c.ServerEndpoint = "https://veeta.org/api/v1/hosts"
+	c.ServerEndpoint = "https://veeta.org/api/v1"
 }
+
+const (
+	// RedHat is
+	RedHat = "redhat"
+
+	// Debian is
+	Debian = "debian"
+
+	// Ubuntu is
+	Ubuntu = "ubuntu"
+
+	// CentOS is
+	CentOS = "centos"
+
+	// Fedora is
+	Fedora = "fedora"
+
+	// Amazon is
+	Amazon = "amazon"
+
+	// Oracle is
+	Oracle = "oracle"
+
+	// FreeBSD is
+	FreeBSD = "freebsd"
+
+	// Raspbian is
+	Raspbian = "raspbian"
+
+	// Windows is
+	Windows = "windows"
+)

@@ -1,31 +1,23 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
 	"path"
-	"strings"
 	"time"
 
 	logrus_stack "github.com/Gurpartap/logrus-stack"
 
 	"github.com/facebookgo/pidfile"
-	vc "github.com/future-architect/vuls/config"
-	"github.com/future-architect/vuls/models"
-	"github.com/future-architect/vuls/scan"
-	"github.com/future-architect/vuls/util"
 	"github.com/pyama86/vaz/config"
+	"github.com/pyama86/vaz/scan"
+	"github.com/pyama86/vaz/util"
+	"github.com/pyama86/vaz/veeta"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
-
-const timeoutSec = 300
 
 var (
 	version   string
@@ -35,13 +27,21 @@ var (
 	builduser string
 )
 
+const LoopMin = 10
+
 func init() {
 	formatter := new(logrus.JSONFormatter)
 	formatter.TimestampFormat = "2006-01-02 15:04:05"
 	logrus.SetFormatter(formatter)
-	callerLevels := logrus.AllLevels
+	callerLevels := []logrus.Level{logrus.PanicLevel, logrus.FatalLevel, logrus.ErrorLevel}
 	stackLevels := []logrus.Level{logrus.PanicLevel, logrus.FatalLevel, logrus.ErrorLevel}
 	logrus.AddHook(logrus_stack.NewHook(callerLevels, stackLevels))
+
+	if os.Getenv("DEBUG") == "" {
+		logrus.SetLevel(logrus.InfoLevel)
+	} else {
+		logrus.SetLevel(logrus.DebugLevel)
+	}
 }
 
 func main() {
@@ -92,7 +92,7 @@ func LaunchServer(c *cli.Context) {
 	if err := pidfile.Write(); err != nil {
 		logrus.Fatal(err)
 	}
-	defer removePidFile()
+	defer util.RemovePidFile()
 
 	hostname, err := os.Hostname()
 	if err != nil {
@@ -100,170 +100,76 @@ func LaunchServer(c *cli.Context) {
 	}
 
 	wd := c.GlobalString("workdir")
-
-	found, err := exists(wd)
+	err = util.CreateWorkDir(wd)
 	if err != nil {
-		log.Fatal(err)
-	}
-
-	if !found {
-		if err := os.Mkdir(wd, 0777); err != nil {
-			logrus.Fatal(err)
-		}
-	}
-
-	util.Log = util.NewCustomLogger(vc.ServerInfo{})
-	vc.Conf = vc.Config{
-		CacheDBPath: path.Join(wd, "cache.db"),
-		LogDir:      wd,
-		ResultsDir:  wd,
-		Servers: map[string]vc.ServerInfo{
-			hostname: vc.ServerInfo{
-				ServerName: hostname,
-				Host:       "localhost",
-				Port:       "local",
-			},
-		},
-	}
-
-	if err := scan.InitServers(timeoutSec); err != nil {
 		logrus.Fatal(err)
 	}
 
-	scan.DetectPlatforms(timeoutSec)
+	server, err := scan.DetectOS()
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
+	client := veeta.NewClient(conf.ServerEndpoint, conf.Token)
 
 	for {
-		if err := scan.Scan(timeoutSec); err != nil {
-			logrus.Fatal(err)
-		}
-
-		raw, err := ioutil.ReadFile(path.Join(wd, "current", fmt.Sprintf("%s.json", hostname)))
+		logrus.Info("Start to acquire package information")
+		err = server.EnsureInstallPackages()
 		if err != nil {
-			logrus.Fatal(err, " can't read scan result")
-		}
-
-		sr := models.ScanResult{}
-		if err := json.Unmarshal(raw, &sr); err != nil {
-			logrus.Fatal(err, " scan result unmarshal error")
+			logrus.Fatal(err)
 		}
 
 		id, err := ioutil.ReadFile(path.Join(wd, ".id"))
 		if err != nil {
-			logrus.Warn(err)
+			logrus.Info(err)
 		}
 
-		h := Host{
+		h := veeta.Host{
 			HostID: string(id),
 			Name:   hostname,
-			Service: Service{
+			Service: veeta.Service{
 				Name: conf.Service,
 			},
-			ScanResult: sr,
+			ScanResult: *server.GetScanResult(),
 		}
+		h.ScanResult.ScannedAt = time.Now()
 
-		if err := request(&h, conf); err != nil {
-			logrus.Error(err, " http request error")
+		if len(id) == 0 {
+			logrus.Info("Register new host")
+			if err := client.CreateHost(&h); err != nil {
+				logrus.Error(err, " http request error")
+			} else {
+				if err := util.WriteID(path.Join(wd, ".id"), h.HostID); err != nil {
+					logrus.Fatal(err, " can't write host id")
+				}
+			}
 		} else {
-			if err := writeID(path.Join(wd, ".id"), h.HostID); err != nil {
-				logrus.Fatal(err, " can't write host id")
+			logrus.Info("Update host information")
+			if err := client.UpdateHost(&h); err != nil {
+				logrus.Error(err, " http request error")
+			}
+			logrus.Info("endresuqst")
+		}
+
+		logrus.Infof("Register %v alert", len(h.Alerts))
+		if len(h.Alerts) > 0 {
+			for i, a := range h.Alerts {
+				fixCVEs, err := server.GetFixCVEIDs(scan.Package{
+					Name:    a.PackageName,
+					Version: a.Version,
+				})
+				if err != nil {
+					logrus.Error(err, " fetch changelog error")
+				}
+				cves := scan.FilterResolvCVEs(a.CVEs, fixCVEs)
+				h.Alerts[i].CVEs = cves
+			}
+			// register alert
+			logrus.Info("Update host information with Alert")
+			if err := client.UpdateHost(&h); err != nil {
+				logrus.Error(err, " http request error")
 			}
 		}
-		cleanDir(wd)
-		time.Sleep(10 * time.Minute)
+		time.Sleep(LoopMin * time.Minute)
 	}
-}
-
-func exists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return true, err
-}
-
-const VEETAToken = "VEETA-TOKEN"
-
-func request(host *Host, conf *config.Config) error {
-	j, err := json.Marshal(&host)
-	if err != nil {
-		return err
-	}
-	r := "POST"
-	url := conf.ServerEndpoint
-	if host.HostID != "" {
-		r = "PUT"
-		url = fmt.Sprintf("%s/%s", url, host.HostID)
-	}
-	req, err := http.NewRequest(r, url, bytes.NewReader(j))
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set(VEETAToken, conf.Token)
-	client := &http.Client{}
-	res, err := client.Do(req)
-	if err != nil {
-		return err
-	}
-	defer res.Body.Close()
-	if res.StatusCode != http.StatusCreated && res.StatusCode != http.StatusOK {
-		message := ""
-		switch res.StatusCode {
-		case http.StatusTooManyRequests:
-			message = "Rate limit reached"
-		default:
-			b, err := ioutil.ReadAll(res.Body)
-			if err != nil {
-				return err
-			}
-			message = string(b)
-		}
-		return errors.New(message)
-	}
-
-	bufbody := new(bytes.Buffer)
-	if _, err := bufbody.ReadFrom(res.Body); err != nil {
-		return err
-	}
-
-	if err := json.Unmarshal(bufbody.Bytes(), host); err != nil {
-		return err
-	}
-	return nil
-
-}
-func removePidFile() {
-	if err := os.Remove(pidfile.GetPidfilePath()); err != nil {
-		logrus.Fatalf("Error removing %s: %s", pidfile.GetPidfilePath(), err)
-	}
-}
-
-type Host struct {
-	HostID     string
-	Name       string
-	ScanResult models.ScanResult
-	Service    Service
-}
-type Service struct {
-	Name string
-}
-
-func writeID(path string, id string) error {
-	return ioutil.WriteFile(path, []byte(id), os.ModePerm)
-}
-
-func cleanDir(dir string) error {
-	files, err := ioutil.ReadDir(dir)
-	if err != nil {
-		return err
-	}
-
-	for _, file := range files {
-		if file.IsDir() && strings.HasPrefix(file.Name(), "20") && strings.HasSuffix(file.Name(), "00") {
-			if err := os.RemoveAll(path.Join(dir, file.Name())); err != nil {
-				return err
-			}
-		}
-	}
-	return nil
 }

@@ -12,6 +12,9 @@ SOURCES=COPYING pkg/linux_amd64/vaz vaz.conf.sample
 default: build
 ci: depsdev test vet lint
 
+run:
+	@echo "$(INFO_COLOR)==> $(RESET)$(BOLD)Run By Development Config$(RESET)"
+	go run vaz.go --config ./misc/vaz.conf
 dev:
 	@echo "$(INFO_COLOR)==> $(RESET)$(BOLD)Run Development Container$(RESET)"
 	misc/dev

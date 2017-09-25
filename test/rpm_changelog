@@ -1,0 +1,22 @@
+* Thu Sep 22 2016 Tomáš Mráz <tmraz@redhat.com> 1.0.1e-60
+- fix CVE-2016-2177 - possible integer overflow
+- fix CVE-2016-2178 - non-constant time DSA operations
+- fix CVE-2016-2179 - further DoS issues in DTLS
+- fix CVE-2016-2180 - OOB read in TS_OBJ_print_bio()
+- fix CVE-2016-2181 - DTLS1 replay protection and unprocessed records issue
+- fix CVE-2016-2182 - possible buffer overflow in BN_bn2dec()
+- fix CVE-2016-6302 - insufficient TLS session ticket HMAC length check
+- fix CVE-2016-6304 - unbound memory growth with OCSP status request
+- fix CVE-2016-6306 - certificate message OOB reads
+- mitigate CVE-2016-2183 - degrade all 64bit block ciphers and RC4 to
+  112 bit effective strength
+
+* Tue Jun 21 2016 Tomáš Mráz <tmraz@redhat.com> 1.0.1e-58
+- replace expired testing certificates
+
+* Fri Apr 29 2016 Tomáš Mráz <tmraz@redhat.com> 1.0.1e-57
+- fix CVE-2016-2105 - possible overflow in base64 encoding
+- fix CVE-2016-2106 - possible overflow in EVP_EncryptUpdate()
+- fix CVE-2016-2107 - padding oracle in stitched AES-NI CBC-MAC
+- fix CVE-2016-2108 - memory corruption in ASN.1 encoder
+- fix CVE-2016-2109 - possible DoS when reading ASN.1 data from BIO
