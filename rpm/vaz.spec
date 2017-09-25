@@ -1,6 +1,6 @@
 Summary:          Management linux package on veeta.org.
 Name:             vaz
-Version:          0.0.1
+Version:          0.0.2
 Release:          1
 License:          GPLv3
 URL:              https://github.com/pyama86/vaz
@@ -63,5 +63,8 @@ fi
 %{_sysconfdir}/logrotate.d/%{name}
 
 %changelog
+* Mon Sep 25 2017 pyama86 <www.kazu.com@gmail.com> - 0.0.2-1
+- Close alert using changelog
+
 * Mon Sep 18 2017 pyama86 <www.kazu.com@gmail.com> - 0.0.1-1
 - Pre Release
