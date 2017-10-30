@@ -37,7 +37,7 @@ func (o *debian) rebootRequired() (bool, error) {
 	case 1:
 		return false, nil
 	default:
-		return false, fmt.Errorf("Failed to check reboot reauired: %s", r)
+		return false, fmt.Errorf("Failed to check reboot reauired: %v", r)
 	}
 }
 

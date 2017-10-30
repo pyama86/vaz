@@ -76,7 +76,7 @@ func (o *redhat) scanInstalledPackages() (Packages, error) {
 	}
 	r := exec(cmd)
 	if !r.isSuccess() {
-		return nil, fmt.Errorf("Scan packages failed: %s", r)
+		return nil, fmt.Errorf("Scan packages failed: %v", r)
 	}
 
 	// openssl 0 1.0.1e	30.el6.11 x86_64
