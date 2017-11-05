@@ -76,7 +76,7 @@ func Test_debian_getFixCVEIDsFromChangelog(t *testing.T) {
 
 		t.Run(tt.name, func(t *testing.T) {
 			o := &debian{}
-			if got := o.getFixCVEIDsFromChangelog(o.ChangeLogStartPattern(tt.args.pack), tt.args.changelog); !reflect.DeepEqual(got, tt.want) {
+			if got := getCVEIDsFromBody(o.ChangeLogStartPattern(tt.args.pack), tt.args.changelog); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("debian.getFixCVEIDsFromChangelog() = %v, want %v", got, tt.want)
 			}
 		})

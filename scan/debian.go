@@ -29,33 +29,19 @@ func newDebian() *debian {
 		cache: cache.New(CacheLifeTime*time.Minute, CachePurgeTime*time.Minute),
 	}
 }
-func (o *debian) rebootRequired() (bool, error) {
-	r := exec("test -f /var/run/reboot-required")
-	switch r.ExitStatus {
-	case 0:
-		return true, nil
-	case 1:
-		return false, nil
-	default:
-		return false, fmt.Errorf("Failed to check reboot reauired: %v", r)
-	}
-}
 
+func (o *debian) AddSecurityPackageAlert(alerts *Alerts) error {
+	return nil
+}
 func (o *debian) EnsureInstallPackages() error {
 	release, version, err := o.runningKernel()
 	if err != nil {
 		logrus.Errorf("Failed to scan the running kernel version: %s", err)
 		return err
 	}
-	rebootRequired, err := o.rebootRequired()
-	if err != nil {
-		logrus.Errorf("Failed to detect the kernel reboot required: %s", err)
-		return err
-	}
 	o.Kernel = Kernel{
-		Version:        version,
-		Release:        release,
-		RebootRequired: rebootRequired,
+		Version: version,
+		Release: release,
 	}
 
 	installed, updatable := Packages{}, Packages{}
@@ -344,7 +330,7 @@ func (o *debian) GetFixCVEIDs(pack Package) ([]string, error) {
 		}
 		o.cache.Set(key, changelog, cache.DefaultExpiration)
 	}
-	cveIDs := o.getFixCVEIDsFromChangelog(o.ChangeLogStartPattern(pack), changelog)
+	cveIDs := getCVEIDsFromBody(o.ChangeLogStartPattern(pack), changelog)
 	return cveIDs, nil
 }
 

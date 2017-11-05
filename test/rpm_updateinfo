@@ -1,0 +1,151 @@
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: www.ftp.ne.jp
+ * epel: ftp.riken.jp
+ * extras: www.ftp.ne.jp
+ * updates: www.ftp.ne.jp
+===============================================================================
+  Amazon Linux AMI 2014.03 - ALAS-2016-755: medium priority package update for openssl
+===============================================================================
+  Update ID : ALAS-2016-755
+    Release :
+       Type : security
+     Status : final
+     Issued : 2016-10-12 17:00
+       CVEs : CVE-2016-2179
+            : CVE-2016-2178
+            : CVE-2016-6302
+            : CVE-2016-2181
+            : CVE-2016-6306
+            : CVE-2016-2183
+            : CVE-2016-2182
+            : CVE-2016-2177
+            : CVE-2016-2180
+Description : Package updates are available for Amazon Linux AMI that fix the
+            : following vulnerabilities: CVE-2016-6306:
+            :         1377594:
+            : CVE-2016-6306 openssl: certificate message OOB
+            : reads Multiple out of bounds read flaws were found
+            : in the way OpenSSL handled certain TLS/SSL
+            : protocol handshake messages. A remote attacker
+            : could possibly use these flaws to crash a TLS/SSL
+            : server or client using OpenSSL.
+            :
+            : CVE-2016-6302:
+            :         An integer underflow flaw leading to a
+            :         buffer over-read was found in the way
+            :         OpenSSL parsed TLS session tickets. A
+            :         remote attacker could use this flaw to
+            :         crash a TLS server using OpenSSL if it
+            :         used SHA-512 as HMAC for session tickets.
+            : 1369855: CVE-2016-6302 openssl: Insufficient TLS
+            : session ticket HMAC length checks
+            :
+            : CVE-2016-2183:
+            :         1369383:
+            : CVE-2016-2183 SSL/TLS: Birthday attack against
+            : 64-bit block ciphers (SWEET32) A flaw was found in
+            : the DES/3DES cipher was used as part of the
+            : TLS/SSL protocol. A man-in-the-middle attacker
+            : could use this flaw to recover some plaintext data
+            : by capturing large amounts of encrypted traffic
+            : between TLS/SSL server and client if the
+            : communication used a DES/3DES based ciphersuite.
+            :
+            : CVE-2016-2182:
+            :         1367340:
+            : CVE-2016-2182 openssl: Out-of-bounds write caused
+            : by unchecked errors in BN_bn2dec() An out of
+            : bounds write flaw was discovered in the OpenSSL
+            : BN_bn2dec() function. An attacker able to make an
+            : application using OpenSSL to process a large
+            : BIGNUM could cause the application to crash or,
+            : possibly, execute arbitrary code.
+            :
+            : CVE-2016-2181:
+            :         1369113:
+            : CVE-2016-2181 openssl: DTLS replay protection
+            : bypass allows DoS against DTLS connection A flaw
+            : was found in the Datagram TLS (DTLS) replay
+            : protection implementation in OpenSSL. A remote
+            : attacker could possibly use this flaw to make a
+            : DTLS server using OpenSSL to reject further
+            : packets sent from a DTLS client over an
+            : established DTLS connection.
+            :
+            : CVE-2016-2180:
+            :         1359615:
+            : CVE-2016-2180 OpenSSL: OOB read in
+            : TS_OBJ_print_bio() An out of bounds read flaw was
+            : found in the way OpenSSL formatted Public Key
+            : Infrastructure Time-Stamp Protocol data for
+            : printing. An attacker could possibly cause an
+            : application using OpenSSL to crash if it printed
+            : time stamp data from the attacker.
+            :
+            : CVE-2016-2179:
+            :         1369504:
+            : CVE-2016-2179 openssl: DTLS memory exhaustion DoS
+            : when messages are not removed from fragment buffer
+            : It was discovered that the Datagram TLS (DTLS)
+            : implementation could fail to release memory in
+            : certain cases. A malicious DTLS client could cause
+            : a DTLS server using OpenSSL to consume an
+            : excessive amount of memory and, possibly, exit
+            : unexpectedly after exhausting all available
+            : memory.
+            :
+            : CVE-2016-2178:
+            :         It was discovered that OpenSSL did not
+            :         always use constant time operations when
+            :         computing Digital Signature Algorithm
+            :         (DSA) signatures. A local attacker could
+            :         possibly use this flaw to obtain a private
+            :         DSA key belonging to another user or
+            :         service running on the same system.
+            : 1343400: CVE-2016-2178 openssl: Non-constant time
+            : codepath followed for certain operations in DSA
+            : implementation
+            :
+            : CVE-2016-2177:
+            :         1341705:
+            : CVE-2016-2177 openssl: Possible integer overflow
+            : vulnerabilities in codebase Multiple integer
+            : overflow flaws were found in the way OpenSSL
+            : performed pointer arithmetic. A remote attacker
+            : could possibly use these flaws to cause a TLS/SSL
+            : server or client using OpenSSL to crash.
+   Severity : medium
+
+===============================================================================
+  Amazon Linux AMI 2014.03 - ALAS-2017-803: medium priority package update for openssl
+===============================================================================
+  Update ID : ALAS-2017-803
+    Release :
+       Type : security
+     Status : final
+     Issued : 2017-03-06 14:00
+       CVEs : CVE-2017-3731
+            : CVE-2016-8610
+Description : Package updates are available for Amazon Linux AMI that fix the
+            : following vulnerabilities: CVE-2017-3731:
+            :         1416852:
+            : CVE-2017-3731 openssl: Truncated packet could
+            : crash via OOB read An integer underflow leading to
+            : an out of bounds read flaw was found in OpenSSL. A
+            : remote attacker could possibly use this flaw to
+            : crash a 32-bit TLS/SSL server or client using
+            : OpenSSL if it used the RC4-MD5 cipher suite.
+            :
+            : CVE-2016-8610:
+            :         1384743:
+            : CVE-2016-8610 SSL/TLS: Malformed plain-text ALERT
+            : packets could cause remote DoS A denial of service
+            : flaw was found in the way the TLS/SSL protocol
+            : defined processing of ALERT packets during a
+            : connection handshake. A remote attacker could use
+            : this flaw to make a TLS/SSL server consume an
+            : excessive amount of CPU and fail to accept
+            : connections form other clients.
+   Severity : medium
+updateinfo info done
