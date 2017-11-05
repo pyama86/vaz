@@ -63,7 +63,6 @@ func (c Client) UpdateHost(host *Host) error {
 }
 
 func (c Client) request(body []byte, url, rtype string) ([]byte, error) {
-
 	req, err := http.NewRequest(rtype, url, bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set(VEETAToken, c.Token)

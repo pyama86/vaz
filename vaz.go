@@ -27,7 +27,7 @@ var (
 	builduser string
 )
 
-const LoopMin = 10
+const LoopMin = 60
 
 func init() {
 	formatter := new(logrus.JSONFormatter)
@@ -150,7 +150,12 @@ func LaunchServer(c *cli.Context) {
 			}
 		}
 
+		if err := server.AddSecurityPackageAlert(&h.Alerts); err != nil {
+			logrus.Error(err, " add security package")
+		}
+
 		logrus.Infof("Register %v alert", len(h.Alerts))
+
 		if len(h.Alerts) > 0 {
 			for i, a := range h.Alerts {
 				fixCVEs, err := server.GetFixCVEIDs(scan.Package{

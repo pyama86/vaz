@@ -67,6 +67,7 @@ type osTypeInterface interface {
 	GetPackages() *Packages
 	GetScanResult() *ScanResult
 	GetFixCVEIDs(Package) ([]string, error)
+	AddSecurityPackageAlert(*Alerts) error
 }
 
 func DetectOS() (osType osTypeInterface, err error) {
@@ -179,12 +180,12 @@ func (o *ScanResult) getChangeLog(cmd string) (string, error) {
 	return stdout, nil
 }
 
-func (o *ScanResult) getFixCVEIDsFromChangelog(startRe *regexp.Regexp, changelog string) []string {
+func getCVEIDsFromBody(startRe *regexp.Regexp, body string) []string {
 	startLineFound := false
 	cveIDs := []string{}
 	var cveRe = regexp.MustCompile(`(CVE-\d{4}-\d{4,})`)
 
-	lines := strings.Split(changelog, "\n")
+	lines := strings.Split(body, "\n")
 	for _, line := range lines {
 		if !startLineFound {
 			if matche := startRe.MatchString(line); matche {
