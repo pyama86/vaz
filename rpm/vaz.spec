@@ -1,6 +1,6 @@
 Summary:          Management linux package on veeta.org.
 Name:             vaz
-Version:          0.0.2
+Version:          0.0.3
 Release:          1
 License:          GPLv3
 URL:              https://github.com/pyama86/vaz
@@ -63,6 +63,9 @@ fi
 %{_sysconfdir}/logrotate.d/%{name}
 
 %changelog
+* Sun Nov 5 2017 pyama86 <www.kazu.com@gmail.com> - 0.0.3-1
+- #1 Added support for rhel security advisory
+
 * Mon Sep 25 2017 pyama86 <www.kazu.com@gmail.com> - 0.0.2-1
 - Close alert using changelog
 

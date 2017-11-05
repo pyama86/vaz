@@ -91,12 +91,12 @@ deb-repo:
 	cd releases/debian && \
 	reprepro includedeb vaz *.deb
 
-pkg: ## Create some distribution packages
+pkg: build ## Create some distribution packages
 	rm -rf builds && mkdir builds
 	docker-compose up deb16
 	docker-compose up rpm6 rpm7
 
-repo:
+repo: pkg
 	rm -rf releases/debian/{db, main}
 	docker-compose run rpm-repo
 	docker-compose run deb-repo
