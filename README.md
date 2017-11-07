@@ -1,7 +1,7 @@
 # vaz
 [![Build Status](https://travis-ci.org/pyama86/vaz.svg?branch=master)](https://travis-ci.org/pyama86/vaz)
 
-vaz is [veeta](https://veeta.org) server client.
+vaz is [veeta](https://www.veeta.tech) server client.
 Send package information to veeta to determine if there is vulnerability
 
 <p align="center">
@@ -38,6 +38,9 @@ service = "your service name"
 # Please create with veeta.org
 token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
+
+# special thanks
+The base of vaz is [vuls](https://github.com/future-architect/vuls). vuls is a very wonderful product.
 
 ## author
 * pyama86
