@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"os"
 	"path"
 	"time"
@@ -27,7 +28,7 @@ var (
 	builduser string
 )
 
-const LoopMin = 60
+const LoopMin = 180
 
 func init() {
 	formatter := new(logrus.JSONFormatter)
@@ -133,7 +134,6 @@ func LaunchServer(c *cli.Context) {
 			ScanResult: *server.GetScanResult(),
 		}
 		h.ScanResult.ScannedAt = time.Now()
-
 		if len(id) == 0 {
 			logrus.Info("Register new host")
 			if err := client.CreateHost(&h); err != nil {
@@ -175,6 +175,6 @@ func LaunchServer(c *cli.Context) {
 				logrus.Error(err, " http request error")
 			}
 		}
-		time.Sleep(LoopMin * time.Minute)
+		time.Sleep(time.Duration((LoopMin + rand.Intn(180))) * time.Minute)
 	}
 }
