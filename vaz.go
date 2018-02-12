@@ -138,10 +138,6 @@ func LaunchServer(c *cli.Context) {
 			logrus.Info("Register new host")
 			if err := client.CreateHost(&h); err != nil {
 				logrus.Error(err, " http request error")
-			} else {
-				if err := util.WriteID(path.Join(wd, ".id"), h.HostID); err != nil {
-					logrus.Fatal(err, " can't write host id")
-				}
 			}
 		} else {
 			logrus.Info("Update host information")
@@ -173,6 +169,12 @@ func LaunchServer(c *cli.Context) {
 			logrus.Info("Update host information with Alert")
 			if err := client.UpdateHost(&h); err != nil {
 				logrus.Error(err, " http request error")
+			}
+		}
+
+		if len(id) == 0 {
+			if err := util.WriteID(path.Join(wd, ".id"), h.HostID); err != nil {
+				logrus.Fatal(err, " can't write host id")
 			}
 		}
 		time.Sleep(time.Duration((LoopMin + rand.Intn(180))) * time.Minute)
